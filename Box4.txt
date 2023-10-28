@@ -1,0 +1,6 @@
+N = 4000
+J_min = 0.0
+Omega = 1.0
+samples = 2
+distribution = 1
+seed = 8
