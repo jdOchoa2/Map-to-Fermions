@@ -8,7 +8,7 @@ using LinearAlgebra
 using Random
 
 #Read parameters
-file_path = ARGS[1]
+file_path = "./Parameters/"*ARGS[1]
 parameters = read_parameters(file_path)
 N       = get(parameters, "N", nothing)
 J_min   = get(parameters, "J_min", nothing)
@@ -28,7 +28,7 @@ R = vcat([r for r in 1:2:10],[trunc(Int,10^r) + (trunc(Int,10^r)+ 1) %2  for r i
 #Find correlation functions
 C_zz, C_xx, Var_C_zz, Var_C_xx = Correlation_Function(R, Domain, N, samples, distribution, J_min, Omega)
 # Save data to csv file
-file_path = string(distribution)*"-"*string(J_min)*".csv"
+file_path = "./Data/"*string(distribution)*"-"*string(J_min)*".csv"
 Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx)
 CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx"]))
 

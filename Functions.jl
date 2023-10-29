@@ -1,9 +1,9 @@
 """Dioganilazation of free fermion's hamiltonian for finding 
-    correlation functions in a disordered spin chain"""
+correlation functions in a random antiferromagnetic spin chain"""
 
 function Hamiltonian(N,distribution,J_min,Omega)
     """Returns the hamiltonian of the system as a NxN matrix 
-    with coupling constants according to some distribution"""
+    with coupling constants according to given distribution"""
     couplings = distribution(N,J_min,Omega)
     H = zeros(Float64, N, N)
     for ii in 1:N-1
