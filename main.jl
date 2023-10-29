@@ -31,5 +31,3 @@ C_zz, C_xx, Var_C_zz, Var_C_xx = Correlation_Function(R, Domain, N, samples, dis
 file_path = "./Data/"*string(distribution)*"-"*string(J_min)*".csv"
 Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx)
 CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx"]))
-
-println("Data saved as $file_path\n")
