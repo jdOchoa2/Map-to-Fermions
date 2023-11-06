@@ -103,8 +103,7 @@ function Correlation_Function(R, Domain, N, samples, distribution, J_min, Omega=
             C_xx_2[r] += X.^2
         end
     end
-    C_zz /= samples; C_xx /= samples; C_zz_2 /= samples; C_xx_2 /= samples
-    return C_zz, C_xx, C_zz_2 - C_zz.^2, C_xx_2 - C_xx.^2
+    return C_zz, C_xx, C_zz_2, C_xx_2
 end
 
 function read_parameters(file_path)
@@ -117,15 +116,14 @@ function read_parameters(file_path)
             # Remove leading/trailing whitespaces
             key = strip(key)
             value = strip(value)         
-            # Check if the value is an integer or float
-            if occursin(".", value)
-                value = parse(Float64, value)
-            else
-                value = parse(Int, value)
-            end
             # Store the parsed values in the dictionary
-            parameters[key] = value
+            parameters[key] = parse(Float64, value)
         end
     end
     return parameters
+end
+
+function Add(x, y)
+    """Custom reduce operator"""
+    return x+y
 end

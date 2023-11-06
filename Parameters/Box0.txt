@@ -1,5 +1,5 @@
 N = 4000
-J_min = 0.25
+J_min = 0.0
 Omega = 1.0
 samples = 4
 distribution = 1

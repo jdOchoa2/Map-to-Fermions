@@ -1,6 +1,6 @@
 N = 4000
-J_min = 0.25
+J_min = 0.1
 Omega = 1.0
 samples = 4
-distribution = 1
+distribution = 2
 seed = 8
