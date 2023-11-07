@@ -69,7 +69,7 @@ function Longitudinal_Correlation(r,N,Corr_Matrix)
     return Corr_z/(4*N)
 end
 
-function Transversal_Correlation(r,N,Corr_Matrix)
+function Transverse_Correlation(r,N,Corr_Matrix)
     """Correlation function along X spin direction"""
     Corr_x = 0.
     A = zeros(Float64, r, r)
@@ -82,28 +82,32 @@ function Transversal_Correlation(r,N,Corr_Matrix)
         end
         Corr_x += det(A)
     end
-    return -1^r*Corr_x/(4*N)
+    return (-1)^r*Corr_x/(4*N)
 end
 
-function Correlation_Function(R, Domain, N, samples, distribution, J_min, Omega=1)
+function Correlation_Function(R, Rpp, Domain, N, samples, distribution, J_min, Omega=1)
     """Finds the average of the correlation function for a separation length domain
     R, averaging over a given number of samples in a spin chain of length N"""
     C_zz = zeros(Float64, Domain, 1); C_xx = zeros(Float64, Domain, 1)
     C_zz_2 = zeros(Float64, Domain, 1); C_xx_2 = zeros(Float64, Domain, 1)
+    C_xxpp = zeros(Float64, Domain, 1); C_xxpp_2 = zeros(Float64, Domain, 1)
     for t in 1:samples
         H = Hamiltonian(N,distribution,J_min,Omega)
         U = eigen(H).vectors
         Corr_Matrix = Correlation_Matrix(U,N)
         for r in 1:Domain
             Z = Longitudinal_Correlation(R[r],N,Corr_Matrix) 
-            X = Transversal_Correlation(R[r],N,Corr_Matrix)
+            X = Transverse_Correlation(R[r],N,Corr_Matrix)
+            Xpp = Transverse_Correlation(Rpp[r],N,Corr_Matrix)
             C_zz[r] += Z
             C_xx[r] += X
             C_zz_2[r] += Z.^2
             C_xx_2[r] += X.^2
+            C_xxpp[r] += Xpp
+            C_xxpp_2[r] += Xpp.^2
         end
     end
-    return C_zz, C_xx, C_zz_2, C_xx_2
+    return C_zz, C_xx, C_zz_2, C_xx_2, C_xxpp, C_xxpp_2
 end
 
 function read_parameters(file_path)

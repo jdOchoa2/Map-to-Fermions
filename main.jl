@@ -32,18 +32,21 @@ end
 #Set random seed for reproducibility (if same number of proccesses)
 Random.seed!(seed*MPI.Comm_rank(comm))
 #Define domain of separation lengths
-R = vcat([r for r in 1:2:10],[trunc(Int,10^r) + (trunc(Int,10^r)+ 1) %2  for r in 1:0.06:2.3]); Domain = length(R)
+R = vcat([r for r in 1:2:10],[trunc(Int,10^r) + (trunc(Int,10^r)+ 1) %2  for r in 1.06:0.06:2.3]); Domain = length(R); Rpp = R .+ 1
+print(Rpp)
+"""
 #Find correlation functions
-c_zz, c_xx, c_zz_2, c_xx_2 = Correlation_Function(R, Domain, N, samples, distribution, J_min, Omega)
-Summary = vcat(c_zz, c_xx, c_zz_2, c_xx_2); T_samples = samples*MPI.Comm_size(comm)
+c_zz, c_xx, c_zz_2, c_xx_2, c_xxpp, c_xxpp_2 = Correlation_Function(R, Rpp, Domain, N, samples, distribution, J_min, Omega)
+Summary = vcat(c_zz, c_xx, c_zz_2, c_xx_2, c_xxpp, c_xxpp_2); T_samples = samples*MPI.Comm_size(comm)
 recAll = MPI.Reduce(Summary, Add, root, comm)
 if MPI.Comm_rank(comm) == root
     #Average over all samples
     print("\nThe total number of samples was ", T_samples,"\n"); recAll /= T_samples
-    C_zz = recAll[1:Domain]; C_xx = recAll[Domain+1:2*Domain] 
-    Var_C_zz = recAll[2*Domain+1:3*Domain] - C_zz.^2; Var_C_xx = recAll[3*Domain+1:4*Domain] - C_xx.^2 
+    C_zz = recAll[1:Domain]; C_xx = recAll[Domain+1:2*Domain]; C_xxpp =  recAll[4*Domain+1:5*Domain]
+    Var_C_zz = recAll[2*Domain+1:3*Domain] - C_zz.^2; Var_C_xx = recAll[3*Domain+1:4*Domain] - C_xx.^2
+    Var_C_xxpp =  recAll[5*Domain+1:6*Domain] - C_xxpp.^2
     # Save data to csv file
     file_path = "./Data/"*string(distribution)*"-"*string(J_min)*".csv"
-    Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx)
-    CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx"]))
-end
+    Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx, C_xxpp, Var_C_xxpp)
+    CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx","C_xxpp","Var_C_xxpp"]))
+end"""

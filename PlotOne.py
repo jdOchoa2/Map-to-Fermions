@@ -33,12 +33,15 @@ C_zz = df['C_zz'].to_numpy()
 C_xx = df['C_xx'].to_numpy()
 Var_C_zz = df['Var_C_zz'].to_numpy()
 Var_C_xx = df['Var_C_xx'].to_numpy()
+C_xxpp = df['C_xxpp'].to_numpy()
+Var_C_xxpp = df['Var_C_xxpp'].to_numpy()
 SeriesZ = -R**2 * C_zz;         ErrorZ  = R**2 * np.sqrt(Var_C_zz)
 SeriesX = R**2 * np.abs(C_xx);  ErrorX  = R**2 * np.sqrt(Var_C_xx)
+SeriesXpp = np.abs(C_xx + C_xxpp)
 
 # Plotting C_zz
 plt.figure(figsize=(5, 5))
-plt.scatter(R, SeriesZ, label="Box distribution, J_min = 0", color="blue", s=2.2)
+plt.scatter(R, SeriesZ, label="Distribution", color="blue", s=2.2)
 plt.errorbar(R, SeriesZ, yerr=ErrorZ, fmt='o', color="blue", markersize=2.2, capsize=2)
 plt.plot(R, SeriesZ, linestyle='--', linewidth=0.5, color='blue')
 plt.axhline(1/np.pi**2, color="orange", linestyle="--", label="$1/π^2$")
@@ -53,7 +56,7 @@ plt.savefig("./Images/Czz"+distribution+"-"+str(J_min)+".png", dpi=300, bbox_inc
 # Plotting C_xx
 x = np.arange(1, 201, 2); f = lambda x: 0.14709 * x**(3/2); y = f(x) #Clean system
 plt.figure(figsize=(5, 5))
-plt.scatter(R, SeriesX, label="Box distribution, J_min = 0", color="blue", s=2.2)
+plt.scatter(R, SeriesX, label="Distribution", color="blue", s=2.2)
 plt.errorbar(R, SeriesX, yerr=ErrorX, fmt='o', color="blue", markersize=2.2, capsize=2)
 plt.plot(R, SeriesX, linestyle='--', linewidth=0.5, color='blue')
 plt.plot(x, y, label="Clean system", color="orange")
@@ -65,3 +68,17 @@ plt.ylabel("$l^2|C_{xx}(l)|$")
 plt.ylim(0.05, 300)
 plt.legend(loc="upper left")
 plt.savefig("./Images/Cxx"+distribution+"-"+str(J_min)+".png", dpi=300, bbox_inches="tight")
+
+#Plotting C_xx + C_xx+1
+x = np.arange(1, 201, 2); f = lambda x: 1/(12*x**(2)); y = f(x) #Universallity prediction
+plt.figure(figsize=(5, 5))
+plt.scatter(R+.5, SeriesXpp, label="Distribution", color="blue", s=2.2)
+plt.plot(R+.5, SeriesXpp, linestyle='--', linewidth=0.5, color='blue')
+plt.plot(x, y, label="Clean system", color="orange")
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel("$l$")
+plt.ylabel("$|C_{xx}(l)+C_{xx}(l+1)|$")
+plt.ylim(10e-8,.1)
+plt.legend(loc="lower left")
+plt.savefig("./Images/Cxxpp"+distribution+"-"+str(J_min)+".png", dpi=300, bbox_inches="tight")
