@@ -9,9 +9,7 @@ MapToFermions: main.jl Functions.jl PlotOne.py
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_1};\
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_2};\
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_3};\
-	python3 PlotOne.py ${Parameters_1};\
-	python3 PlotOne.py ${Parameters_2};\
-	python3 PlotOne.py ${Parameters_3};\
+	python3 PlotAll.py ${Parameters_1} ${Parameters_2} ${Parameters_3}
 
 clean_Images:
 	find ./Images -type f -name "*.png" -exec rm -f {} \;

@@ -33,8 +33,6 @@ end
 Random.seed!(seed*MPI.Comm_rank(comm))
 #Define domain of separation lengths
 R = vcat([r for r in 1:2:10],[trunc(Int,10^r) + (trunc(Int,10^r)+ 1) %2  for r in 1.06:0.06:2.3]); Domain = length(R); Rpp = R .+ 1
-print(Rpp)
-"""
 #Find correlation functions
 c_zz, c_xx, c_zz_2, c_xx_2, c_xxpp, c_xxpp_2 = Correlation_Function(R, Rpp, Domain, N, samples, distribution, J_min, Omega)
 Summary = vcat(c_zz, c_xx, c_zz_2, c_xx_2, c_xxpp, c_xxpp_2); T_samples = samples*MPI.Comm_size(comm)
@@ -49,4 +47,4 @@ if MPI.Comm_rank(comm) == root
     file_path = "./Data/"*string(distribution)*"-"*string(J_min)*".csv"
     Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx, C_xxpp, Var_C_xxpp)
     CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx","C_xxpp","Var_C_xxpp"]))
-end"""
+end
