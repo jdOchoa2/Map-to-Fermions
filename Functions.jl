@@ -59,28 +59,38 @@ function Correlation_Matrix(U,N)
     return Corr_Matrix
 end
 
+function Pair_Longitudinal_Correlation(i,r,N,Corr_Matrix)
+    """Pair correlation function along Z spin direction"""
+    j = (i+r-1)%N+1 
+    return Corr_Matrix[j,j]*Corr_Matrix[i,i] - Corr_Matrix[i,j]^2
+end
+
+function Pair_Transverse_Correlation(i,r,N,Corr_Matrix)
+    """Pair correlation function along X spin direction"""
+    A = zeros(Float64, r, r)
+    for column in 1:r
+        for row in 1:r
+            ii = (i+column-1)%N+1%N; jj = (i+row-2)%N+1%N
+            A[column,row] = Corr_Matrix[ii,jj]
+        end
+    end
+    return det(A)
+end
+
 function Longitudinal_Correlation(r,N,Corr_Matrix)
-    """Correlation function along Z spin direction"""
+    """Mean correlation function along Z spin direction"""
     Corr_z = 0.
     for i in 1:N
-        j = (i+r-1)%N+1 
-        Corr_z += Corr_Matrix[j,j]*Corr_Matrix[i,i] - Corr_Matrix[i,j]^2
+        Corr_z += Pair_Longitudinal_Correlation(i,r,N,Corr_Matrix)
     end
     return Corr_z/(4*N)
 end
 
 function Transverse_Correlation(r,N,Corr_Matrix)
-    """Correlation function along X spin direction"""
+    """Mean correlation function along X spin direction"""
     Corr_x = 0.
-    A = zeros(Float64, r, r)
     for i in 1:N
-        for column in 1:r
-            for row in 1:r
-                ii = (i+column-1)%N+1%N; jj = (i+row-2)%N+1%N
-                A[column,row] = Corr_Matrix[ii,jj]
-            end
-        end
-        Corr_x += det(A)
+        Corr_x += Pair_Transverse_Correlation(i,r,N,Corr_Matrix)
     end
     return (-1)^r*Corr_x/(4*N)
 end
