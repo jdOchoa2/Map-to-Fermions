@@ -3,40 +3,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-def read_parameters(n):
-    file_path = sys.argv[n]
-    parameters = {}
-    with open("./Parameters/"+file_path, 'r') as file:
-        for line in file:
-            # Split the line into key and value
-            key, value = line.strip().split('=')
-            # Remove leading/trailing whitespace
-            key = key.strip()
-            value = value.strip()
-            # Store the parameters in a dictionary
-            parameters[key] = value
-    J_min = parameters.get('J_min', None)
-    Model = parameters.get('distribution', None)
-    distribution = Which_Model(Model)
-    return [J_min,distribution]
-
-def read_correlation(J_min, distribution):
-    data_path = distribution+"-"+str(J_min)+".csv"
-    df = pd.read_csv("./Data/"+data_path)
-    R = df['R'].to_numpy()
-    C_zz = df['C_zz'].to_numpy()
-    C_xx = df['C_xx'].to_numpy()
-    Var_C_zz = df['Var_C_zz'].to_numpy()
-    Var_C_xx = df['Var_C_xx'].to_numpy()
-    C_xxpp = df['C_xxpp'].to_numpy()
-    Var_C_xxpp = df['Var_C_xxpp'].to_numpy()
-    return [-R**2 * C_zz,R**2 * np.sqrt(Var_C_zz),R**2 * np.abs(C_xx),R**2 * np.sqrt(Var_C_xx),np.abs(C_xx + C_xxpp), Var_C_xxpp, R]
-
-def Which_Model(Model):
-    if Model == "1":
-        return "Box_Hamiltonian"
-    else:
-        return "Binary_Hamiltonian"
+from Functions import read_parameters, read_correlation, Which_Model
 
 """---------------MAIN-----------------"""
 
@@ -46,7 +13,7 @@ ErrorX  = [None,None,None];  ErrorZ = [None,None,None];  ErrorXpp = [None,None,N
 J_min = [None,None,None]  ; distribution = [None,None,None]; R = []
 
 for n in range(3):
-    J_min[n], distribution[n] = read_parameters(n+1)
+    J_min[n], distribution[n] = read_parameters(sys.argv[n+1])
     SeriesZ[n], ErrorZ[n], SeriesX[n], ErrorX[n], SeriesXpp[n], ErrorXpp[n], R = read_correlation(J_min[n], distribution[n])
 
 # Plotting C_zz
@@ -68,15 +35,15 @@ plt.savefig("./Images/Czz.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_zz
 plt.figure(figsize=(5, 1))
-plt.scatter(R, np.sqrt(ErrorZ[0]), color="red", s=4)
-plt.plot(R,    np.sqrt(ErrorZ[0]), linestyle='--', linewidth=0.5, color='red')
-plt.scatter(R, np.sqrt(ErrorZ[1]), color="green", s=4)
-plt.plot(R,    np.sqrt(ErrorZ[1]), linestyle='--', linewidth=0.5, color='green')
-plt.scatter(R, np.sqrt(ErrorZ[2]), color="blue", s=4)
-plt.plot(R,    np.sqrt(ErrorZ[2]), linestyle='--', linewidth=0.5, color='blue')
+plt.scatter(R, ErrorZ[0], color="red", s=4)
+plt.plot(R,    ErrorZ[0], linestyle='--', linewidth=0.5, color='red')
+plt.scatter(R, ErrorZ[1], color="green", s=4)
+plt.plot(R,    ErrorZ[1], linestyle='--', linewidth=0.5, color='green')
+plt.scatter(R, ErrorZ[2], color="blue", s=4)
+plt.plot(R,    ErrorZ[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.xlabel("$l$")
-plt.ylabel("$\sigma$")
+plt.ylabel("$l^2\sigma$")
 plt.savefig("./Images/Errorzz.png", dpi=300, bbox_inches="tight")
 
 # Plotting C_xx
@@ -100,16 +67,16 @@ plt.savefig("./Images/Cxx.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_xx
 plt.figure(figsize=(5, 1))
-plt.scatter(R, np.sqrt(ErrorX[0]), color="red", s=4)
-plt.plot(R,    np.sqrt(ErrorX[0]), linestyle='--', linewidth=0.5, color='red')
-plt.scatter(R, np.sqrt(ErrorX[1]), color="green", s=4)
-plt.plot(R,    np.sqrt(ErrorX[1]), linestyle='--', linewidth=0.5, color='green')
-plt.scatter(R, np.sqrt(ErrorX[2]), color="blue", s=4)
-plt.plot(R,    np.sqrt(ErrorX[2]), linestyle='--', linewidth=0.5, color='blue')
+plt.scatter(R, ErrorX[0], color="red", s=4)
+plt.plot(R,    ErrorX[0], linestyle='--', linewidth=0.5, color='red')
+plt.scatter(R, ErrorX[1], color="green", s=4)
+plt.plot(R,    ErrorX[1], linestyle='--', linewidth=0.5, color='green')
+plt.scatter(R, ErrorX[2], color="blue", s=4)
+plt.plot(R,    ErrorX[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel("$l$")
-plt.ylabel("$\sigma$")
+plt.ylabel("$l^2\sigma$")
 plt.savefig("./Images/Errorxx.png", dpi=300, bbox_inches="tight")
 
 #Plotting C_xx + C_xx+1
@@ -132,12 +99,12 @@ plt.savefig("./Images/Cxxpp.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_xx + C_xx+1
 plt.figure(figsize=(5, 1))
-plt.scatter(R, np.sqrt(ErrorXpp[0]), color="red", s=4)
-plt.plot(R,    np.sqrt(ErrorXpp[0]), linestyle='--', linewidth=0.5, color='red')
-plt.scatter(R, np.sqrt(ErrorXpp[1]), color="green", s=4)
-plt.plot(R,    np.sqrt(ErrorXpp[1]), linestyle='--', linewidth=0.5, color='green')
-plt.scatter(R, np.sqrt(ErrorXpp[2]), color="blue", s=4)
-plt.plot(R,    np.sqrt(ErrorXpp[2]), linestyle='--', linewidth=0.5, color='blue')
+plt.scatter(R, ErrorXpp[0], color="red", s=4)
+plt.plot(R,    ErrorXpp[0], linestyle='--', linewidth=0.5, color='red')
+plt.scatter(R, ErrorXpp[1], color="green", s=4)
+plt.plot(R,    ErrorXpp[1], linestyle='--', linewidth=0.5, color='green')
+plt.scatter(R, ErrorXpp[2], color="blue", s=4)
+plt.plot(R,    ErrorXpp[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel("$l$")

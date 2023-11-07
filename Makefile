@@ -5,7 +5,7 @@ proccesses   = 2
 
 all: MapToFermions
 
-MapToFermions: main.jl Functions.jl PlotOne.py
+MapToFermions: main.jl Functions.jl PlotAll.py Functions.py
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_1};\
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_2};\
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_3};\
