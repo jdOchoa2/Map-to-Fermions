@@ -30,6 +30,18 @@ def read_correlation(J_min, distribution):
     return [-R**2 * C_zz,R**2 * np.sqrt(Var_C_zz),R**2 * np.abs(C_xx),
             R**2 * np.sqrt(Var_C_xx),np.abs(C_xx + C_xxpp), np.sqrt(Var_C_xxpp)+np.sqrt(Var_C_xx), R]
 
+def read_pair(J_min, distribution):
+    data_path = "Pair-"+distribution+"-"+str(J_min)+".csv"
+    df = pd.read_csv("./Data/"+data_path)
+    R = df['R'].to_numpy()
+    Corr_x_p = df['Corr_x_p'].to_numpy()
+    Corr_x = df['Corr_x'].to_numpy()
+    Corr_x_m = df['Corr_x_m'].to_numpy()
+    Corr_z_p = df['Corr_z_p'].to_numpy()
+    Corr_z = df['Corr_z'].to_numpy()
+    Corr_z_m = df['Corr_z_m'].to_numpy()
+    return [Corr_x_p, Corr_x, Corr_x_m, Corr_z_p, Corr_z, Corr_z_m, R]
+
 def Which_Model(Model):
     if Model == "1":
         return "Box_Hamiltonian"

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-from Functions import read_parameters, read_correlation, Which_Model
+from Functions import read_parameters, read_correlation
 
 """---------------MAIN-----------------"""
 

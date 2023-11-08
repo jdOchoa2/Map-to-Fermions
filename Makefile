@@ -11,6 +11,10 @@ MapToFermions: main.jl Functions.jl PlotAll.py Functions.py
 	mpiexecjl -n ${proccesses} julia main.jl ${Parameters_3};\
 	python3 PlotAll.py ${Parameters_1} ${Parameters_2} ${Parameters_3}
 
+PairCorrelations: Pair.jl PlotPairs.py Functions.py
+	julia Pair.jl ${Parameters_1};\
+	python3 PlotPairs.py ${Parameters_1}
+
 clean_Images:
 	find ./Images -type f -name "*.png" -exec rm -f {} \;
 
