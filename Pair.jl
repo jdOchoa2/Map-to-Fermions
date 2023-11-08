@@ -38,9 +38,9 @@ for r in 1:Domain
     Corr_x_p[r] = Pair_Transverse_Correlation(i+1,r,N,Corr_Matrix)
     Corr_x[r] = Pair_Transverse_Correlation(i,r,N,Corr_Matrix)
     Corr_x_m[r] = Pair_Transverse_Correlation(i-1,r,N,Corr_Matrix)
-    Corr_z_p[r] = Pair_Longitudinal_Correlation(i+1,r,N,Corr_Matrix)
+    Corr_z_p[r] = Pair_Longitudinal_Correlation(i+2,r,N,Corr_Matrix)
     Corr_z[r] = Pair_Longitudinal_Correlation(i,r,N,Corr_Matrix)
-    Corr_z_m[r] = Pair_Longitudinal_Correlation(i-1,r,N,Corr_Matrix)
+    Corr_z_m[r] = Pair_Longitudinal_Correlation(i-2,r,N,Corr_Matrix)
 end
 Corr_x_p/=4; Corr_x/=4; Corr_x_m/=4; Corr_z_p/=4; Corr_z/=4; Corr_z_m/=4
 # Save data to csv file
