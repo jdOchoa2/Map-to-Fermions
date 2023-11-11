@@ -26,9 +26,9 @@ end
 function Delta(x)
     """Dirac delta function"""
     if abs(x) < 1e-15
-        return 1
+        return 1.
     else 
-        return 0
+        return 0.
     end
 end
 
@@ -116,6 +116,7 @@ function Correlation_Function(R, Rpp, Domain, N, samples, distribution, J_min, O
             C_xxpp[r] += Xpp
             C_xxpp_2[r] += Xpp.^2
         end
+        print(" ",t," ")
     end
     return C_zz, C_xx, C_zz_2, C_xx_2, C_xxpp, C_xxpp_2
 end

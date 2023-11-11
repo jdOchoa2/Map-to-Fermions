@@ -14,10 +14,13 @@ const comm = MPI.COMM_WORLD
 const root = 0
 #Read parameters
 if MPI.Comm_rank(comm) == root
+    start_time = time()
+    print("\tReading parameters...\n")
     file_path = "./Parameters/"*ARGS[1]
     parameters = read_parameters(file_path)
     Get_Parameters = [get(parameters, "N", nothing),get(parameters, "J_min", nothing),get(parameters, "Omega", nothing),
             get(parameters, "samples", nothing),get(parameters, "distribution", nothing),get(parameters, "seed", nothing)]
+    print("\tStarting sampling...\n")
 else
     Get_Parameters = nothing
 end
@@ -39,7 +42,7 @@ Summary = vcat(c_zz, c_xx, c_zz_2, c_xx_2, c_xxpp, c_xxpp_2); T_samples = sample
 recAll = MPI.Reduce(Summary, Add, root, comm)
 if MPI.Comm_rank(comm) == root
     #Average over all samples
-    print("\nThe total number of samples was ", T_samples,"\n"); recAll /= T_samples
+    print("\n\tThe total number of samples was ", T_samples,"\n"); recAll /= T_samples
     C_zz = recAll[1:Domain]; C_xx = recAll[Domain+1:2*Domain]; C_xxpp =  recAll[4*Domain+1:5*Domain]
     Var_C_zz = recAll[2*Domain+1:3*Domain] - C_zz.^2; Var_C_xx = recAll[3*Domain+1:4*Domain] - C_xx.^2
     Var_C_xxpp =  recAll[5*Domain+1:6*Domain] - C_xxpp.^2
@@ -47,4 +50,7 @@ if MPI.Comm_rank(comm) == root
     file_path = "./Data/"*string(distribution)*"-"*string(J_min)*".csv"
     Data = hcat(R,C_zz, C_xx, Var_C_zz, Var_C_xx, C_xxpp, Var_C_xxpp)
     CSV.write(file_path, DataFrame(Data, ["R","C_zz","C_xx","Var_C_zz","Var_C_xx","C_xxpp","Var_C_xxpp"]))
+    print("\tSaving data...\n");
+    elapsed_time = time() - start_time
+    println("\tElapsed time: $elapsed_time seconds")
 end
