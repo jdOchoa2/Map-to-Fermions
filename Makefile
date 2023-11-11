@@ -1,7 +1,7 @@
 Parameters_1 = "Box0.txt"
 Parameters_2 = "Box4.txt"
 Parameters_3 = "Bin10.txt"
-proccesses   = 2
+proccesses   = 8 
 
 all: MapToFermions
 
