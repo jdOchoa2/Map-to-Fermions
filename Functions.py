@@ -28,7 +28,7 @@ def read_correlation(J_min, distribution):
     C_xxpp = df['C_xxpp'].to_numpy()
     Var_C_xxpp = df['Var_C_xxpp'].to_numpy()
     return [-R**2 * C_zz,R**2 * np.sqrt(Var_C_zz),R**2 * np.abs(C_xx),
-            R**2 * np.sqrt(Var_C_xx),np.abs(C_xx + C_xxpp), np.sqrt(Var_C_xxpp)+np.sqrt(Var_C_xx), R]
+            R**2 * np.sqrt(Var_C_xx), (R+1)**2 * np.abs(C_xxpp), (R+1)**2 * np.sqrt(Var_C_xxpp), np.abs(C_xx + C_xxpp), np.sqrt(Var_C_xxpp)+np.sqrt(Var_C_xx), R]
 
 def read_pair(J_min, distribution):
     data_path = "Pair-"+distribution+"-"+str(J_min)+".csv"
