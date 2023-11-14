@@ -11,8 +11,8 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> uniform_distribution(0.5, 1.0);
-    const int No = 2e6+1;
-    int N = 2e6+1;
+    const int No = 1e6+1;
+    int N = 1e6+1;
     std::vector<double> Hamiltonian;
     std::vector<int> Lengths;
     std::vector<int> Distribution(N/2+1, 0);
