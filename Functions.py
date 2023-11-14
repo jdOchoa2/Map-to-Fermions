@@ -47,14 +47,3 @@ def Which_Model(Model):
         return "Box_Hamiltonian"
     else:
         return "Binary_Hamiltonian"
-    
-def read_SDRG(file_path):
-    with open(file_path, 'r') as file:
-        # Read the content of the file
-        content = file.read()
-        # Split the content into a list of strings
-        numbers_as_strings = content.split()
-        # Convert each string to an integer
-        numbers = [int(num) for num in numbers_as_strings]
-        # Print the list of integers
-        return np.array(numbers)
