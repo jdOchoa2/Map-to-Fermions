@@ -11,11 +11,11 @@ SeriesX = [None,None,None]; SeriesZ = [None,None,None]; SeriesXp = [None,None,No
 ErrorX  = [None,None,None];  ErrorZ = [None,None,None];  ErrorXp = [None,None,None]
 SeriesXpp = [None,None,None]; ErrorXpp = [None,None,None]
 
-J_min = [None,None,None]  ; distribution = [None,None,None]; R = []
+N = [None,None,None]; J_min = [None,None,None]  ; distribution = [None,None,None]; R = []
 
 for n in range(3):
-    J_min[n], distribution[n] = read_parameters(sys.argv[n+1])
-    SeriesZ[n], ErrorZ[n], SeriesX[n], ErrorX[n], SeriesXp[n], ErrorXp[n], SeriesXpp[n], ErrorXpp[n], R = read_correlation(J_min[n], distribution[n])
+    N[n], J_min[n], distribution[n] = read_parameters(sys.argv[n+1])
+    SeriesZ[n], ErrorZ[n], SeriesX[n], ErrorX[n], SeriesXp[n], ErrorXp[n], SeriesXpp[n], ErrorXpp[n], R = read_correlation(N[n], J_min[n], distribution[n])
 
 # Plotting C_zz
 plt.figure(figsize=(5, 5))
@@ -35,7 +35,7 @@ plt.legend(loc="upper left")
 plt.savefig("./Images/Czz.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_zz
-plt.figure(figsize=(5, 1))
+plt.figure(figsize=(4, 2))
 plt.scatter(R, ErrorZ[0], color="red", s=4)
 plt.plot(R,    ErrorZ[0], linestyle='--', linewidth=0.5, color='red')
 plt.scatter(R, ErrorZ[1], color="green", s=4)
@@ -44,7 +44,7 @@ plt.scatter(R, ErrorZ[2], color="blue", s=4)
 plt.plot(R,    ErrorZ[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.xlabel("$l$")
-plt.ylabel("$l^2\sigma$")
+plt.ylabel("$Error_{zz}$")
 plt.savefig("./Images/Errorzz.png", dpi=300, bbox_inches="tight")
 
 # Plotting C_xx
@@ -70,7 +70,7 @@ plt.legend(loc="upper left")
 plt.savefig("./Images/Cxx.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_xx
-plt.figure(figsize=(5, 1))
+plt.figure(figsize=(4, 2))
 plt.scatter(R, ErrorX[0], color="red", s=4)
 plt.scatter(R+1, ErrorXp[0], color="red", s=8, marker ="x")
 plt.plot(R,    ErrorX[0], linestyle='--', linewidth=0.5, color='red')
@@ -83,7 +83,8 @@ plt.plot(R,    ErrorX[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel("$l$")
-plt.ylabel("$l^2\sigma$")
+plt.ylabel("$Error_{xx}$")
+plt.ylim(1e-7,10)
 plt.savefig("./Images/Errorxx.png", dpi=300, bbox_inches="tight")
 
 #Plotting C_xx + C_xx+1
@@ -105,7 +106,7 @@ plt.legend(loc="lower left")
 plt.savefig("./Images/Cxxpp.png", dpi=300, bbox_inches="tight")
 
 # Plotting DesvEsta C_xx + C_xx+1
-plt.figure(figsize=(5, 1))
+plt.figure(figsize=(4, 2))
 plt.scatter(R, ErrorXpp[0], color="red", s=4)
 plt.plot(R,    ErrorXpp[0], linestyle='--', linewidth=0.5, color='red')
 plt.scatter(R, ErrorXpp[1], color="green", s=4)
@@ -115,5 +116,5 @@ plt.plot(R,    ErrorXpp[2], linestyle='--', linewidth=0.5, color='blue')
 plt.xscale('log')
 plt.yscale('log')
 plt.xlabel("$l$")
-plt.ylabel("$\sigma$")
+plt.ylabel("$Error_{xx}$")
 plt.savefig("./Images/Errorxxpp.png", dpi=300, bbox_inches="tight")

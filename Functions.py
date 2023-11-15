@@ -12,12 +12,13 @@ def read_parameters(file_path):
             value = value.strip()
             # Store the parameters in a dictionary
             parameters[key] = value
+    N = parameters.get("N",None)
     J_min = parameters.get('J_min', None)
     Model = parameters.get('distribution', None)
     distribution = Which_Model(Model)
-    return [J_min,distribution]
+    return [int(N),J_min,distribution]
 
-def read_correlation(J_min, distribution):
+def read_correlation(N,J_min, distribution):
     data_path = distribution+"-"+str(J_min)+".csv"
     df = pd.read_csv("./Data/"+data_path)
     R = df['R'].to_numpy()
@@ -27,8 +28,9 @@ def read_correlation(J_min, distribution):
     Var_C_xx = df['Var_C_xx'].to_numpy()
     C_xxpp = df['C_xxpp'].to_numpy()
     Var_C_xxpp = df['Var_C_xxpp'].to_numpy()
-    return [-R**2 * C_zz,R**2 * np.sqrt(Var_C_zz),R**2 * np.abs(C_xx),
-            R**2 * np.sqrt(Var_C_xx), (R+1)**2 * np.abs(C_xxpp), (R+1)**2 * np.sqrt(Var_C_xxpp), np.abs(C_xx + C_xxpp), np.sqrt(Var_C_xxpp)+np.sqrt(Var_C_xx), R]
+    return [-R**2 * C_zz, (R**2 * np.sqrt(Var_C_zz))/np.sqrt(N), R**2 * np.abs(C_xx),(R**2 * np.sqrt(Var_C_xx))/np.sqrt(N), 
+            (R+1)**2 * np.abs(C_xxpp), ((R+1)**2 * np.sqrt(Var_C_xxpp))/np.sqrt(N), 
+            np.abs(C_xx + C_xxpp), (np.sqrt(Var_C_xxpp)+np.sqrt(Var_C_xx))/np.sqrt(N), R]
 
 def read_pair(J_min, distribution):
     data_path = "Pair-"+distribution+"-"+str(J_min)+".csv"
