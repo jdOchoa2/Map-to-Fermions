@@ -8,11 +8,11 @@ To run the main part of the code:
 ```bash
 make
 ```
-This will produce .txt files with the disorder-averaged zz correlation function.
+This will produce .txt files with the disorder-averaged correlation functions.
 
 ## Plotting
 
-To plot the results, first install matplotlib and numpy with:
+To plot the results, run:
 
 ```bash
 pip install -r code/requirements.txt
