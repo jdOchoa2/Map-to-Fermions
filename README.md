@@ -3,17 +3,17 @@ This repository contains code to solve a spin-1/2 random antiferromagnetic XX ch
 
 ## Running the simulation
 
-To run the main part of the code:
+To run the main part of the code, specify the number of processess to be used and the file which contains the parameters of the chain:
 
 ```bash
-make
+mpiexecjl -n ${proccesses} julia main.jl ${Parameters}
 ```
-This will produce .txt files with the disorder-averaged correlation functions.
+This will produce .csv files with the disorder-averaged correlation functions.
 
 ## Plotting
 
-To plot the results, run:
+To reproduce the three curves, run the following with the correct parameter files:
 
 ```bash
-pip install -r code/requirements.txt
+python3 PlotAll.py ${Parameters_1} ${Parameters_2} ${Parameters_3}
 ```
